@@ -13,7 +13,7 @@
 ### Swift 基础用法
 此项目全部使用 Swift 语言编写，在 `Xcode 7.3.1 (7D1014) 版本（ Swift 2.2 SDK ）`下此项目可以正确编译并运行在 iOS 虚拟机或者 iOS 真机设备上。（项目编译存在的 Warming 是由于我懒，没有添加正确的 App 载入图片导致的）
 
-**注意:** 由于我个人习惯，初始项目简历的 StoryBoard 已经被我从项目中踢除，全部界面内容都是通过代码来进行控制的。
+**注意:** 由于我个人习惯，初始项目建立的 StoryBoard 已经被我从项目中踢除，全部界面内容都是通过代码来进行控制的。
 
 ### Swift 下 Singleton、Block、Delegate、NSNotification 四种多 Class 之间数据通讯和回掉用法
 
@@ -58,7 +58,7 @@ Delegate 用法请参见 `NewsCell.swift`
 由于使用了 `?` ，所以不在需要对 delegate 是否包含协议方法再次做确认。
 设置代理方法和 Objective-C 基本一致。
 
-NSNotification 用法和 Objective-C 基本一致，请参见 KLTheme.swift 。
+NSNotification 用法和 Objective-C 基本一致，请参见 `KLTheme.swift` 。
 
 ### 高度不同的 UITablviewCell 处理和 Cell 高度变化动画
 
