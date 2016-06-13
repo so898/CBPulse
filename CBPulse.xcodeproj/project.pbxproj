@@ -7,21 +7,36 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7901BAB11D06E35B00944D28 /* CBNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7901BAB01D06E35B00944D28 /* CBNavigationController.swift */; };
+		793B40921D055E5600785AA8 /* KLTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793B40911D055E5600785AA8 /* KLTheme.swift */; };
+		79B70EA61D07341B0085826E /* NewsDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B70EA51D07341B0085826E /* NewsDetailViewController.swift */; };
 		79E092841D0205660097FDA6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E092831D0205660097FDA6 /* AppDelegate.swift */; };
 		79E092861D0205660097FDA6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E092851D0205660097FDA6 /* ViewController.swift */; };
-		79E092891D0205660097FDA6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79E092871D0205660097FDA6 /* Main.storyboard */; };
 		79E0928B1D0205660097FDA6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 79E0928A1D0205660097FDA6 /* Assets.xcassets */; };
-		79E0928E1D0205660097FDA6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79E0928C1D0205660097FDA6 /* LaunchScreen.storyboard */; };
+		79E0929A1D0279460097FDA6 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E092991D0279460097FDA6 /* Utils.swift */; };
+		79E0929D1D0279670097FDA6 /* ServerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E0929C1D0279670097FDA6 /* ServerManager.swift */; };
+		79E092A21D02E5460097FDA6 /* CBNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E092A11D02E5460097FDA6 /* CBNews.swift */; };
+		79E092A41D02F14A0097FDA6 /* CBNewsDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E092A31D02F14A0097FDA6 /* CBNewsDetail.swift */; };
+		79E092A71D0325E40097FDA6 /* NewsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E092A61D0325E40097FDA6 /* NewsCell.swift */; };
+		79E092AA1D0330A10097FDA6 /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E092A91D0330A10097FDA6 /* UIImageViewExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7901BAB01D06E35B00944D28 /* CBNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBNavigationController.swift; sourceTree = "<group>"; };
+		793B40911D055E5600785AA8 /* KLTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KLTheme.swift; sourceTree = "<group>"; };
+		79B70EA51D07341B0085826E /* NewsDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsDetailViewController.swift; sourceTree = "<group>"; };
 		79E092801D0205660097FDA6 /* CBPulse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CBPulse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		79E092831D0205660097FDA6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		79E092851D0205660097FDA6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		79E092881D0205660097FDA6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		79E0928A1D0205660097FDA6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		79E0928D1D0205660097FDA6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		79E0928F1D0205660097FDA6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		79E092991D0279460097FDA6 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		79E0929C1D0279670097FDA6 /* ServerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerManager.swift; sourceTree = "<group>"; };
+		79E0929F1D02CB4A0097FDA6 /* BridgeHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgeHeader.h; sourceTree = "<group>"; };
+		79E092A11D02E5460097FDA6 /* CBNews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBNews.swift; sourceTree = "<group>"; };
+		79E092A31D02F14A0097FDA6 /* CBNewsDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBNewsDetail.swift; sourceTree = "<group>"; };
+		79E092A61D0325E40097FDA6 /* NewsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsCell.swift; sourceTree = "<group>"; };
+		79E092A91D0330A10097FDA6 /* UIImageViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +50,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7901BAAF1D06E33C00944D28 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				7901BAB01D06E35B00944D28 /* CBNavigationController.swift */,
+				79B70EA51D07341B0085826E /* NewsDetailViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
 		79E092771D0205660097FDA6 = {
 			isa = PBXGroup;
 			children = (
@@ -54,14 +78,69 @@
 		79E092821D0205660097FDA6 /* CBPulse */ = {
 			isa = PBXGroup;
 			children = (
+				7901BAAF1D06E33C00944D28 /* ViewControllers */,
+				79E092A51D0325C80097FDA6 /* Cells */,
+				79E092A01D02E50A0097FDA6 /* Modules */,
+				79E0929E1D02CAC00097FDA6 /* BridgeHeaders */,
+				79E092981D0279210097FDA6 /* MainFunctions */,
 				79E092831D0205660097FDA6 /* AppDelegate.swift */,
 				79E092851D0205660097FDA6 /* ViewController.swift */,
-				79E092871D0205660097FDA6 /* Main.storyboard */,
 				79E0928A1D0205660097FDA6 /* Assets.xcassets */,
-				79E0928C1D0205660097FDA6 /* LaunchScreen.storyboard */,
 				79E0928F1D0205660097FDA6 /* Info.plist */,
 			);
 			path = CBPulse;
+			sourceTree = "<group>";
+		};
+		79E092981D0279210097FDA6 /* MainFunctions */ = {
+			isa = PBXGroup;
+			children = (
+				79E092A81D03306E0097FDA6 /* UIExtension */,
+				79E0929B1D02794C0097FDA6 /* Networking */,
+				79E092991D0279460097FDA6 /* Utils.swift */,
+			);
+			path = MainFunctions;
+			sourceTree = "<group>";
+		};
+		79E0929B1D02794C0097FDA6 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				79E0929C1D0279670097FDA6 /* ServerManager.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		79E0929E1D02CAC00097FDA6 /* BridgeHeaders */ = {
+			isa = PBXGroup;
+			children = (
+				79E0929F1D02CB4A0097FDA6 /* BridgeHeader.h */,
+			);
+			path = BridgeHeaders;
+			sourceTree = "<group>";
+		};
+		79E092A01D02E50A0097FDA6 /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				79E092A11D02E5460097FDA6 /* CBNews.swift */,
+				79E092A31D02F14A0097FDA6 /* CBNewsDetail.swift */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		79E092A51D0325C80097FDA6 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				79E092A61D0325E40097FDA6 /* NewsCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		79E092A81D03306E0097FDA6 /* UIExtension */ = {
+			isa = PBXGroup;
+			children = (
+				79E092A91D0330A10097FDA6 /* UIImageViewExtension.swift */,
+				793B40911D055E5600785AA8 /* KLTheme.swift */,
+			);
+			path = UIExtension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -122,9 +201,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				79E0928E1D0205660097FDA6 /* LaunchScreen.storyboard in Resources */,
 				79E0928B1D0205660097FDA6 /* Assets.xcassets in Resources */,
-				79E092891D0205660097FDA6 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,31 +212,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7901BAB11D06E35B00944D28 /* CBNavigationController.swift in Sources */,
+				79E092A21D02E5460097FDA6 /* CBNews.swift in Sources */,
+				79E0929D1D0279670097FDA6 /* ServerManager.swift in Sources */,
 				79E092861D0205660097FDA6 /* ViewController.swift in Sources */,
+				79E092A71D0325E40097FDA6 /* NewsCell.swift in Sources */,
 				79E092841D0205660097FDA6 /* AppDelegate.swift in Sources */,
+				79B70EA61D07341B0085826E /* NewsDetailViewController.swift in Sources */,
+				79E092A41D02F14A0097FDA6 /* CBNewsDetail.swift in Sources */,
+				793B40921D055E5600785AA8 /* KLTheme.swift in Sources */,
+				79E092AA1D0330A10097FDA6 /* UIImageViewExtension.swift in Sources */,
+				79E0929A1D0279460097FDA6 /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		79E092871D0205660097FDA6 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				79E092881D0205660097FDA6 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		79E0928C1D0205660097FDA6 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				79E0928D1D0205660097FDA6 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		79E092901D0205660097FDA6 /* Debug */ = {
@@ -249,10 +316,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = CBPulse/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = R3.Studio.CBPulse;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = CBPulse/BridgeHeaders/BridgeHeader.h;
 			};
 			name = Debug;
 		};
@@ -260,10 +331,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = CBPulse/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = R3.Studio.CBPulse;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = CBPulse/BridgeHeaders/BridgeHeader.h;
 			};
 			name = Release;
 		};
@@ -286,6 +361,7 @@
 				79E092941D0205660097FDA6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
