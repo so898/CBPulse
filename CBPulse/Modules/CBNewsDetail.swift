@@ -37,23 +37,23 @@ class CBNewsDetail{
     
     
     
-    class func initWithDictionary(dic: NSDictionary) -> CBNewsDetail{
-        let detail : CBNewsDetail = CBNewsDetail.init()
-        detail.sid = (dic.objectForKey("sid") as! NSString).integerValue
-        detail.title = (dic.objectForKey("title") as! String)
-        detail.thumb = (dic.objectForKey("thumb") as! String)
-        detail.hometext = (dic.objectForKey("hometext") as! String)
-        detail.bodytext = (dic.objectForKey("bodytext") as! String)
-        detail.source = (dic.objectForKey("source") as! String)
-        detail.inputtime = (dic.objectForKey("inputtime") as! NSString).integerValue
-        detail.counter = (dic.objectForKey("counter") as! NSString).integerValue
-        detail.comments = (dic.objectForKey("comments") as! NSString).integerValue
-        detail.time = (dic.objectForKey("time") as! String)
-        detail.topic = (dic.objectForKey("topic") as! NSString).integerValue
-        detail.ratings = (dic.objectForKey("ratings") as! NSString).integerValue
-        detail.ratins_story = (dic.objectForKey("ratings_story") as! NSString).integerValue
-        detail.score = (dic.objectForKey("score") as! NSString).integerValue
-        detail.score_story = (dic.objectForKey("score_story") as! NSString).integerValue
+    class func initWithDictionary(_ dic: NSDictionary) -> CBNewsDetail{
+        let detail : CBNewsDetail = CBNewsDetail()
+        detail.sid = (dic.object(forKey: "sid") as! NSString).integerValue
+        detail.title = (dic.object(forKey: "title") as! String)
+        detail.thumb = (dic.object(forKey: "thumb") as! String)
+        detail.hometext = (dic.object(forKey: "hometext") as! String)
+        detail.bodytext = (dic.object(forKey: "bodytext") as! String)
+        detail.source = (dic.object(forKey: "source") as! String)
+        detail.inputtime = (dic.object(forKey: "inputtime") as! NSString).integerValue
+        detail.counter = (dic.object(forKey: "counter") as! NSString).integerValue
+        detail.comments = (dic.object(forKey: "comments") as! NSString).integerValue
+        detail.time = (dic.object(forKey: "time") as! String)
+        detail.topic = (dic.object(forKey: "topic") as! NSString).integerValue
+        detail.ratings = (dic.object(forKey: "ratings") as! NSString).integerValue
+        detail.ratins_story = (dic.object(forKey: "ratings_story") as! NSString).integerValue
+        detail.score = (dic.object(forKey: "score") as! NSString).integerValue
+        detail.score_story = (dic.object(forKey: "score_story") as! NSString).integerValue
         return detail
     }
 }

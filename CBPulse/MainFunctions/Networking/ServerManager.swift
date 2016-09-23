@@ -9,66 +9,66 @@
 import Foundation
 
 class ServerManager{
-    private var BaseURL = "http://api.cnbeta.com/capi"
+    fileprivate var BaseURL = "http://api.cnbeta.com/capi"
     
     static let sharedInstance = ServerManager()//Singleton
     
-    private var session : NSURLSession
+    fileprivate var session : URLSession
     
     init(){
-        session = NSURLSession.sharedSession();
+        session = URLSession.shared;
     }
     
-    func getNewsList(sid: Int?, success: ((array : NSArray) -> Void)?, fail: ((code : NSInteger, error : NSError?) -> Void)?) {
+    func getNewsList(_ sid: Int?, success: ((_ array : NSArray) -> Void)?, fail: ((_ code : NSInteger, _ error : NSError?) -> Void)?) {
         var dic : NSDictionary
         if nil == sid {
-            dic = NSDictionary.init(objects: ["Article.Lists"], forKeys: ["method"])
+            dic = NSDictionary.init(objects: ["Article.Lists"], forKeys: ["method" as NSCopying])
         } else {
-            dic = NSDictionary.init(objects: ["Article.Lists", String(sid!)], forKeys: ["method", "end_sid"])
+            dic = NSDictionary.init(objects: ["Article.Lists", String(sid!)], forKeys: ["method" as NSCopying, "end_sid" as NSCopying])
         }
         
         self.GET(BaseURL, paramaters: self.generateSign(dic), success: { (data) in
             let dic : AnyObject = Utils.decodeJSONToData(data!)
-            let status = dic.objectForKey("status")
-            if (status!.isEqualToString("success")){
-                let array = dic.objectForKey("result")
+            let status = dic.object(forKey: "status")
+            if ((status! as AnyObject).isEqual(to: "success")){
+                let array = dic.object(forKey: "result")
                 let results : NSMutableArray = NSMutableArray()
                 
                 for item in (array as! NSArray){
-                    results.addObject(CBNews.initWithDictionary((item as! NSDictionary)))
+                    results.add(CBNews.initWithDictionary((item as! NSDictionary)))
                 }
                 
                 if nil != success{
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        success!(array: results)
+                    DispatchQueue.main.async(execute: { () -> Void in
+                        success!(results)
                     })
                 }
             } else {
                 if nil != fail{
-                    fail!(code: -1, error: nil)
+                    fail!(-1, nil)
                 }
             }
         }, fail: fail)
     }
     
-    func getNewsDetail(sid: Int, success: ((detail : CBNewsDetail) -> Void)?, fail: ((code : NSInteger, error : NSError?) -> Void)?) {
-        let paramaters : NSDictionary = NSDictionary.init(objects: [String(sid), "Article.NewsContent"], forKeys: ["sid","method"])
+    func getNewsDetail(_ sid: Int, success: ((_ detail : CBNewsDetail) -> Void)?, fail: ((_ code : NSInteger, _ error : NSError?) -> Void)?) {
+        let paramaters : NSDictionary = NSDictionary.init(objects: [String(sid), "Article.NewsContent"], forKeys: ["sid" as NSCopying,"method" as NSCopying])
         self.GET(BaseURL, paramaters: self.generateSign(paramaters), success: { (data) in
             let dic : AnyObject = Utils.decodeJSONToData(data!)
-            let status = dic.objectForKey("status")
-            if (status!.isEqualToString("success")){
-                let result = dic.objectForKey("result")
+            let status = dic.object(forKey: "status")
+            if ((status! as AnyObject).isEqual(to: "success")){
+                let result = dic.object(forKey: "result")
                 
                 let detail : CBNewsDetail = CBNewsDetail.initWithDictionary(result as! NSDictionary)
                 
                 if nil != success{
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        success!(detail: detail)
+                    DispatchQueue.main.async(execute: { () -> Void in
+                        success!(detail)
                     })
                 }
             } else {
                 if nil != fail{
-                    fail!(code: -1, error: nil)
+                    fail!(-1, nil)
                 }
             }
         }, fail: { (code, error) in
@@ -76,10 +76,10 @@ class ServerManager{
         })
     }
     
-    private func GET(urlString: String, paramaters: NSDictionary?, success: ((data : NSData?) -> Void)?, fail: ((code : NSInteger, error : NSError?) -> Void)?){
+    fileprivate func GET(_ urlString: String, paramaters: NSDictionary?, success: ((_ data : Data?) -> Void)?, fail: ((_ code : NSInteger, _ error : NSError?) -> Void)?){
         guard urlString.characters.count > 0 else {
             if nil != fail{
-                fail!(code: -999, error: nil)
+                fail!(-999, nil)
             }
             return
         }
@@ -89,44 +89,38 @@ class ServerManager{
         //handle paramaters
         if nil != paramaters {
             for key in paramaters!.allKeys {
-                dataString.appendString("&" + (key as! String) + "=" + (paramaters!.objectForKey(key) as! String))
+                dataString.append("&" + (key as! String) + "=" + (paramaters!.object(forKey: key) as! String))
             }
         }
         
         //parser string
-        let url = NSURL.init(string: dataString.length == 0 ? urlString : urlString + "?" + dataString.substringFromIndex(1))
-        
-        if url is NSError{
-            if nil != fail{
-                fail!(code: -1000, error: (url as! NSError))
-            }
-        }
+        let url = URL(string: dataString.length == 0 ? urlString : urlString + "?" + dataString.substring(from: 1))
         
         //make request
-        let request : NSMutableURLRequest = NSMutableURLRequest.init(URL: url!, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData, timeoutInterval: 10)
-        request.HTTPMethod = "GET"
+        let request : NSMutableURLRequest = NSMutableURLRequest.init(url: url!, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData, timeoutInterval: 10)
+        request.httpMethod = "GET"
         
         //fire session
-        session.dataTaskWithRequest(request as NSURLRequest) { (data, response, error) in
-            if response is NSHTTPURLResponse{
-                let statusCode : NSInteger = (response as! NSHTTPURLResponse).statusCode
+        session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) in
+            if response is HTTPURLResponse{
+                let statusCode : NSInteger = (response as! HTTPURLResponse).statusCode
                 if 200 == statusCode{
                     if nil != success{
-                        success!(data: data)
+                        success!(data)
                     }
                 } else {
                     if nil != fail{
-                        fail!(code: statusCode, error: error)
+                        fail!(statusCode, error as NSError?)
                     }
                 }
             }
-            }.resume()
+            }) .resume()
     }
     
-    private func POST(urlString: String, paramaters: NSDictionary?, success: ((data : NSData?) -> Void)?, fail: ((code : NSInteger, error : NSError?) -> Void)?){
+    fileprivate func POST(_ urlString: String, paramaters: NSDictionary?, success: ((_ data : Data?) -> Void)?, fail: ((_ code : NSInteger, _ error : NSError?) -> Void)?){
         guard urlString.characters.count > 0 else {
             if nil != fail{
-                fail!(code: -999, error: nil)
+                fail!(-999, nil)
             }
             return
         }
@@ -135,72 +129,66 @@ class ServerManager{
         //handle paramaters
         if nil != paramaters {
             for key in paramaters!.allKeys {
-                dataString.appendString("&" + (key as! String) + "=" + (paramaters!.objectForKey(key) as! String))
+                dataString.append("&" + (key as! String) + "=" + (paramaters!.object(forKey: key) as! String))
             }
         }
         
         //parser string
-        let url = NSURL.init(string: urlString)
-        
-        if url is NSError{
-            if nil != fail{
-                fail!(code: -1000, error: (url as! NSError))
-            }
-        }
+        let url = URL(string: urlString)
         
         //make request
-        let request : NSMutableURLRequest = NSMutableURLRequest.init(URL: url!, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData, timeoutInterval: 10)
-        request.HTTPMethod = "POST"
-        request.HTTPBody = dataString.substringFromIndex(1).dataUsingEncoding(NSUTF8StringEncoding)
+        let request : NSMutableURLRequest = NSMutableURLRequest.init(url: url!, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData, timeoutInterval: 10)
+        request.httpMethod = "POST"
+        request.httpBody = dataString.substring(from: 1).data(using: String.Encoding.utf8)
         
         //fire session
-        session.dataTaskWithRequest(request as NSURLRequest) { (data, response, error) in
-            if response is NSHTTPURLResponse{
-                let statusCode : NSInteger = (response as! NSHTTPURLResponse).statusCode
+        session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) in
+            if response is HTTPURLResponse{
+                let statusCode : NSInteger = (response as! HTTPURLResponse).statusCode
                 if 200 == statusCode{
                     if nil != success{
-                        success!(data: data)
+                        success!(data)
                     }
                 } else {
                     if nil != fail{
-                        fail!(code: statusCode, error: error)
+                        fail!(statusCode, error as NSError?)
                     }
                 }
             }
-            }.resume()
+            }) .resume()
     }
     
-    @available(iOS, introduced=2.0, deprecated=7.0, message="Just a Test")
-    private func requestUrl(url : NSURL){
+    @available(iOS, introduced: 2.0, deprecated: 7.0, message: "Just a Test")
+    fileprivate func requestUrl(_ url : URL){
         
-        let request : NSMutableURLRequest = NSMutableURLRequest.init(URL: url, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData, timeoutInterval: 10)
+        let request : NSMutableURLRequest = NSMutableURLRequest.init(url: url, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData, timeoutInterval: 10)
         
         let dic : NSMutableDictionary = NSMutableDictionary()
-        dic.setObject("13720108952", forKey: "username")
-        dic.setObject("287d8806e0baa07f4a29601d46be49e3", forKey: "password")
+        dic.setObject("13720108952", forKey: "username" as NSCopying)
+        dic.setObject("287d8806e0baa07f4a29601d46be49e3", forKey: "password" as NSCopying)
         
         let dataString = NSMutableString()
         
         for key in dic.allKeys {
-            dataString.appendString("&" + (key as! String) + "=" + (dic.objectForKey(key) as! String))
+            dataString.append("&" + (key as! String) + "=" + (dic.object(forKey: key) as! String))
         }
         
-        print(dataString.substringFromIndex(1))
+        print(dataString.substring(from: 1))
         
-        request.HTTPMethod = "POST"
-        request.HTTPBody = dataString.substringFromIndex(1).dataUsingEncoding(NSUTF8StringEncoding)
+        request.httpMethod = "POST"
+        request.httpBody = dataString.substring(from: 1).data(using: String.Encoding.utf8)
         
-        session.dataTaskWithRequest(request as NSURLRequest) { (data, response, error) in
-            if response is NSHTTPURLResponse{
-                print((response as! NSHTTPURLResponse).statusCode)
+        session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) in
+            if response is HTTPURLResponse{
+                print((response as! HTTPURLResponse).statusCode)
             }
             if (nil != data) {
                 print(data)
-                let responseString : String = String.init(data: data!, encoding: NSUTF8StringEncoding)!
+                let responseString : String = String.init(data: data!, encoding: String.Encoding.utf8)!
                 
                 var result : NSMutableDictionary
                 do {
-                    result = try NSJSONSerialization.JSONObjectWithData(data!, options:NSJSONReadingOptions.MutableLeaves) as! NSMutableDictionary
+                    result = try JSONSerialization.jsonObject(with: data!, options:JSONSerialization.ReadingOptions.mutableLeaves) as! NSMutableDictionary
                 } catch _ {
                     result = NSMutableDictionary()
                 }
@@ -215,12 +203,12 @@ class ServerManager{
                 }
             }
             
-        }.resume()
+        }) .resume()
         
         
     }
     
-    private func generateSign(paramaters: NSDictionary?) -> NSDictionary?{
+    fileprivate func generateSign(_ paramaters: NSDictionary?) -> NSDictionary?{
         if nil == paramaters {
             return nil
         }
@@ -228,23 +216,23 @@ class ServerManager{
         let timeStamp : String = Utils.timeStamp;
         
         let resultDic = NSMutableDictionary.init(dictionary: paramaters!)
-        resultDic.setObject("10000", forKey: "app_key")
-        resultDic.setObject("json", forKey: "format")
-        resultDic.setObject(timeStamp, forKey: "timestamp")
-        resultDic.setObject("1.0", forKey: "v")
+        resultDic.setObject("10000", forKey: "app_key" as NSCopying)
+        resultDic.setObject("json", forKey: "format" as NSCopying)
+        resultDic.setObject(timeStamp, forKey: "timestamp" as NSCopying)
+        resultDic.setObject("1.0", forKey: "v" as NSCopying)
         
-        let sortedKeys = (resultDic.allKeys as! [String]).sort()
+        let sortedKeys = (resultDic.allKeys as! [String]).sorted()
         
         var paramatersString : String = ""
         
         for key in sortedKeys {
-            paramatersString = paramatersString + key + "=" + (resultDic.objectForKey(key) as! String) + "&"
+            paramatersString = paramatersString + key + "=" + (resultDic.object(forKey: key) as! String) + "&"
         }
         paramatersString += "mpuffgvbvbttn3Rc"
         
         let sign : String = Utils.MD5(paramatersString)
         
-        resultDic.setObject(sign, forKey: "sign")
+        resultDic.setObject(sign, forKey: "sign" as NSCopying)
         return resultDic
     }
 }

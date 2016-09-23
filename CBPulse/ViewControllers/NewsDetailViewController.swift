@@ -10,9 +10,9 @@ import Foundation
 import UIKit
 
 class NewsDetailViewController: UIViewController, UITextViewDelegate {
-    private var mainText : UITextView = UITextView()
+    fileprivate var mainText : UITextView = UITextView()
     
-    private var attributedString = NSMutableAttributedString()
+    fileprivate var attributedString = NSMutableAttributedString()
     
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -20,60 +20,59 @@ class NewsDetailViewController: UIViewController, UITextViewDelegate {
         title = "详细"
         view.backgroundColor = KLTheme.sharedInstance.detailTextBackgroundColor
         
-        mainText.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight)
+        mainText.frame = CGRect(x: 0, y: 0, width: ScreenWidth, height: ScreenHeight)
         mainText.textColor = KLTheme.sharedInstance.detailTextColor
         mainText.backgroundColor = KLTheme.sharedInstance.textBackgroundColor
-        mainText.font = UIFont.systemFontOfSize(16)
-        mainText.editable = false
+        mainText.font = UIFont.systemFont(ofSize: 16)
+        mainText.isEditable = false
         mainText.delegate = self
         mainText.addNotification()
         view.addSubview(mainText)
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem.init(title: "改颜色", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(changeTheme))
+        navigationItem.rightBarButtonItem = UIBarButtonItem.init(title: "改颜色", style: UIBarButtonItemStyle.plain, target: self, action: #selector(changeTheme))
     }
     
     @objc func changeTheme() {
         KLTheme.sharedInstance.changeType()
     }
     
-    func setNews(sid: Int){
+    func setNews(_ sid: Int){
         ServerManager.sharedInstance.getNewsDetail(sid, success: { (detail) in
             
-            dispatch_async(dispatch_queue_create("NewTextQueue", nil), {
+            DispatchQueue(label: "NewTextQueue", attributes: []).async(execute: {
                 // Perform long running process
                 let titleParagraphStyle : NSMutableParagraphStyle = NSMutableParagraphStyle();
-                titleParagraphStyle.alignment = NSTextAlignment.Center
-                titleParagraphStyle.lineBreakMode = NSLineBreakMode.ByWordWrapping
+                titleParagraphStyle.alignment = NSTextAlignment.center
+                titleParagraphStyle.lineBreakMode = NSLineBreakMode.byWordWrapping
                 titleParagraphStyle.lineSpacing = 5
                 titleParagraphStyle.firstLineHeadIndent = 10
                 titleParagraphStyle.headIndent = 10
                 titleParagraphStyle.tailIndent = -10
                 
-                let titleString = NSAttributedString.init(string: detail.title + "\n\n", attributes: [NSFontAttributeName: UIFont.boldSystemFontOfSize(20), NSParagraphStyleAttributeName:titleParagraphStyle])
-                self.attributedString.appendAttributedString(titleString)
+                let titleString = NSAttributedString.init(string: detail.title + "\n\n", attributes: [NSFontAttributeName: UIFont.boldSystemFont(ofSize: 20), NSParagraphStyleAttributeName:titleParagraphStyle])
+                self.attributedString.append(titleString)
                 
                 let bodyContent = detail.hometext + "\n" + detail.bodytext
-                print(bodyContent)
+//                print(bodyContent)
                 var bodyString : NSMutableAttributedString = NSMutableAttributedString()
                 do {
                     let bodyParagraphStyle : NSMutableParagraphStyle = NSMutableParagraphStyle();
-                    bodyParagraphStyle.lineBreakMode = NSLineBreakMode.ByWordWrapping
+                    bodyParagraphStyle.lineBreakMode = NSLineBreakMode.byWordWrapping
                     bodyParagraphStyle.lineSpacing = 10
                     bodyParagraphStyle.firstLineHeadIndent = 10
                     bodyParagraphStyle.headIndent = 10
                     bodyParagraphStyle.tailIndent = -10
                     
-                    
-                    bodyString = try NSMutableAttributedString.init(data: bodyContent.dataUsingEncoding(NSUTF8StringEncoding)!, options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute: (NSUTF8StringEncoding)], documentAttributes: nil)
-                    bodyString.addAttributes([NSFontAttributeName: UIFont.boldSystemFontOfSize(15), NSParagraphStyleAttributeName: bodyParagraphStyle], range: NSMakeRange(0, bodyString.length))
-                } catch _ {
-                    
+                    bodyString = try NSMutableAttributedString(data: bodyContent.data(using: String.Encoding.utf8)!, options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute: String.Encoding.utf8.rawValue], documentAttributes: nil)
+                    bodyString.addAttributes([NSFontAttributeName: UIFont.boldSystemFont(ofSize: 15), NSParagraphStyleAttributeName: bodyParagraphStyle], range: NSMakeRange(0, bodyString.length))
+                } catch let error as NSError {
+                    print(error.localizedDescription)
                 }
-                print(bodyString)
+//                print(bodyString)
                 bodyString.beginEditing()
-                bodyString.enumerateAttribute(NSAttachmentAttributeName, inRange: NSMakeRange(0, bodyString.length), options: NSAttributedStringEnumerationOptions(rawValue: 0)) { (value, range, stop) -> Void in
+                bodyString.enumerateAttribute(NSAttachmentAttributeName, in: NSMakeRange(0, bodyString.length), options: NSAttributedString.EnumerationOptions(rawValue: 0)) { (value, range, stop) -> Void in
                     if let attachement = value as? NSTextAttachment {
-                        let image = attachement.imageForBounds(attachement.bounds, textContainer: NSTextContainer(), characterIndex: range.location)
+                        let image = attachement.image(forBounds: attachement.bounds, textContainer: NSTextContainer(), characterIndex: range.location)
                         if image!.size.width > ScreenWidth-30 {
                             let newImage = image!.resizeImage((ScreenWidth - 30)/image!.size.width)
                             let newAttribut = NSTextAttachment()
@@ -83,9 +82,9 @@ class NewsDetailViewController: UIViewController, UITextViewDelegate {
                     }
                 }
                 bodyString.endEditing()
-                
-                self.attributedString.appendAttributedString(bodyString)
-                dispatch_async(dispatch_get_main_queue(), {
+
+                self.attributedString.append(bodyString)
+                DispatchQueue.main.async(execute: {
                     // Update the UI
                     self.mainText.attributedText = self.attributedString
                     self.mainText.textColor = KLTheme.sharedInstance.detailTextColor
@@ -100,7 +99,7 @@ class NewsDetailViewController: UIViewController, UITextViewDelegate {
 
 class CBTextAttachment: NSTextAttachment {
     
-    override func attachmentBoundsForTextContainer(textContainer: NSTextContainer?, proposedLineFragment lineFrag: CGRect, glyphPosition position: CGPoint, characterIndex charIndex: Int) -> CGRect {
+    override func attachmentBounds(for textContainer: NSTextContainer?, proposedLineFragment lineFrag: CGRect, glyphPosition position: CGPoint, characterIndex charIndex: Int) -> CGRect {
         let height = lineFrag.size.height
         var scale: CGFloat = 1.0;
         let imageSize = image!.size
@@ -114,14 +113,14 @@ class CBTextAttachment: NSTextAttachment {
 }
 
 extension UIImage {
-    func resizeImage(scale: CGFloat) -> UIImage {
-        let newSize = CGSizeMake(self.size.width*scale, self.size.height*scale)
-        let rect = CGRectMake(0, 0, newSize.width, newSize.height)
+    func resizeImage(_ scale: CGFloat) -> UIImage {
+        let newSize = CGSize(width: self.size.width*scale, height: self.size.height*scale)
+        let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
         
         UIGraphicsBeginImageContext(newSize)
-        self.drawInRect(rect)
+        self.draw(in: rect)
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return newImage
+        return newImage!
     }
 }

@@ -10,11 +10,11 @@ import UIKit
 
 @objc
 protocol NewsCellOptionalDelegate {
-    optional func selectTitle(title : String)
+    @objc optional func selectTitle(_ title : String)
 }
 
 protocol NewsCellDelegate {
-    func openNewsDetail(news : CBNews)
+    func openNewsDetail(_ news : CBNews)
 }
 
 class NewsCell: UITableViewCell{
@@ -37,12 +37,12 @@ class NewsCell: UITableViewCell{
         self.addNotification()
         
         clipsToBounds = true
-        selectionStyle = UITableViewCellSelectionStyle.None
+        selectionStyle = UITableViewCellSelectionStyle.none
         backgroundColor = KLTheme.sharedInstance.cellBackgroundColor
-        contentView.backgroundColor = UIColor.clearColor()
+        contentView.backgroundColor = UIColor.clear
         
-        moreIcon.contentMode = UIViewContentMode.ScaleAspectFit
-        moreIcon.image = UIImage(named: "ic_more")?.imageWithRenderingMode(.AlwaysTemplate)
+        moreIcon.contentMode = UIViewContentMode.scaleAspectFit
+        moreIcon.image = UIImage(named: "ic_more")?.withRenderingMode(.alwaysTemplate)
         moreIcon.tintColor = UIColor(white: 153/255, alpha: 1)
         contentView.addSubview(moreIcon)
         
@@ -57,85 +57,85 @@ class NewsCell: UITableViewCell{
         backgImage.layer.cornerRadius = 5.0
         mainView.addSubview(backgImage)
         
-        detailImage.contentMode = UIViewContentMode.ScaleAspectFit
+        detailImage.contentMode = UIViewContentMode.scaleAspectFit
         detailImage.clipsToBounds = true
         detailImage.layer.cornerRadius = 5.0
         mainView.addSubview(detailImage)
         
-        topicImage.contentMode = UIViewContentMode.ScaleAspectFit
+        topicImage.contentMode = UIViewContentMode.scaleAspectFit
         topicImage.clipsToBounds = true
         topicImage.layer.cornerRadius = 5.0
         mainView.addSubview(topicImage)
         
-        titleLabel.font = UIFont.boldSystemFontOfSize(16)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
         titleLabel.numberOfLines = 0
-        titleLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
-        titleLabel.userInteractionEnabled = true//和OBJC不同
+        titleLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
+        titleLabel.isUserInteractionEnabled = true//和OBJC不同
         mainView.addSubview(titleLabel)
         
-        detailLabel.font = UIFont.systemFontOfSize(14)
+        detailLabel.font = UIFont.systemFont(ofSize: 14)
         detailLabel.numberOfLines = 0;
-        detailLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        detailLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         
         let pan : UIPanGestureRecognizer = UIPanGestureRecognizer.init(target: self, action: #selector(self.panMainView(_:)))
         pan.delegate = self
         addGestureRecognizer(pan)
     }
     
-    @objc func titleTaped(tap : UITapGestureRecognizer){
+    @objc func titleTaped(_ tap : UITapGestureRecognizer){
         optionalDelegate?.selectTitle?(titleLabel.text!)
     }
     
-    @objc private func panMainView(pan : UIPanGestureRecognizer){
-        let point : CGPoint = pan.translationInView(self.contentView)
+    @objc fileprivate func panMainView(_ pan : UIPanGestureRecognizer){
+        let point : CGPoint = pan.translation(in: self.contentView)
         if point.x > 0 {
             return
         }
-        mainView.center = CGPointMake(point.x + ScreenWidth/2, mainView.center.y)
+        mainView.center = CGPoint(x: point.x + ScreenWidth/2, y: mainView.center.y)
         if -70 <= point.x {
-            moreIcon.frame = CGRectMake(ScreenWidth + point.x, moreIcon.frame.origin.y, 70, 24)
+            moreIcon.frame = CGRect(x: ScreenWidth + point.x, y: moreIcon.frame.origin.y, width: 70, height: 24)
         } else {
-            moreIcon.frame = CGRectMake(ScreenWidth - 70, moreIcon.frame.origin.y, 70, 24)
+            moreIcon.frame = CGRect(x: ScreenWidth - 70, y: moreIcon.frame.origin.y, width: 70, height: 24)
         }
-        if UIGestureRecognizerState.Ended == pan.state {
+        if UIGestureRecognizerState.ended == pan.state {
             if -70 > point.x {
                 delegate?.openNewsDetail(store)
             }
-            UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseOut, animations: {
-                self.mainView.center = CGPointMake(ScreenWidth/2, self.mainView.center.y)
-                self.moreIcon.frame = CGRectMake(ScreenWidth + ScreenWidth / 5, self.moreIcon.frame.origin.y, 70, 24)
+            UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.curveEaseOut, animations: {
+                self.mainView.center = CGPoint(x: ScreenWidth/2, y: self.mainView.center.y)
+                self.moreIcon.frame = CGRect(x: ScreenWidth + ScreenWidth / 5, y: self.moreIcon.frame.origin.y, width: 70, height: 24)
             }, completion: nil)
         }
     }
     
-    func setCBNews(news : CBNews, showDetail : Bool){
+    func setCBNews(_ news : CBNews, showDetail : Bool){
         detailStatus = showDetail
         updateThemeForKL()
         store = news
         
         if 0 != news.topic_logo.characters.count{
-            topicImage.setNetImage(NSURL.init(string: news.topic_logo)!)
+            topicImage.setNetImage(URL.init(string: news.topic_logo)!)
         }
         
         if 0 != news.thumb.characters.count{
-            detailImage.setNetImage(NSURL.init(string: news.thumb)!)
+            detailImage.setNetImage(URL.init(string: news.thumb)!)
         }
         
         var height : CGFloat = 10.0
         
         titleLabel.text = news.title
-        let titleHeight : CGFloat = max(40, titleLabel.sizeThatFits(CGSizeMake(ScreenWidth - 35 - 40, CGFloat.max)).height)
-        titleLabel.frame = CGRectMake(15, height, ScreenWidth - 35 - 40, titleHeight)
+        let titleHeight : CGFloat = max(40, titleLabel.sizeThatFits(CGSize(width: ScreenWidth - 35 - 40, height: CGFloat.greatestFiniteMagnitude)).height)
+        titleLabel.frame = CGRect(x: 15, y: height, width: ScreenWidth - 35 - 40, height: titleHeight)
         titleLabel.textColor = KLTheme.sharedInstance.titleTextColor
         
         detailLabel.text = news.summary
-        let detailHeight : CGFloat = detailLabel.sizeThatFits(CGSizeMake(ScreenWidth - 30, CGFloat.max)).height
-        detailLabel.frame = CGRectMake(15, height + titleHeight + 10, ScreenWidth - 30, detailHeight)
+        let detailHeight : CGFloat = detailLabel.sizeThatFits(CGSize(width: ScreenWidth - 30, height: CGFloat.greatestFiniteMagnitude)).height
+        detailLabel.frame = CGRect(x: 15, y: height + titleHeight + 10, width: ScreenWidth - 30, height: detailHeight)
         detailLabel.textColor = KLTheme.sharedInstance.detailTextColor
         
-        detailImage.frame = CGRectMake(ScreenWidth - 15 - 40, (max(height, 60) - 40) / 2, 40, 40)
-        topicImage.frame = CGRectMake(ScreenWidth - 15 - 40, (max(height, 60) - 40) / 2, 40, 40)
-        backgImage.frame = CGRectMake(ScreenWidth - 15 - 40, (max(height, 60) - 40) / 2, 40, 40)
+        detailImage.frame = CGRect(x: ScreenWidth - 15 - 40, y: (max(height, 60) - 40) / 2, width: 40, height: 40)
+        topicImage.frame = CGRect(x: ScreenWidth - 15 - 40, y: (max(height, 60) - 40) / 2, width: 40, height: 40)
+        backgImage.frame = CGRect(x: ScreenWidth - 15 - 40, y: (max(height, 60) - 40) / 2, width: 40, height: 40)
         
         height += titleHeight + 10
         
@@ -146,40 +146,40 @@ class NewsCell: UITableViewCell{
             topicImage.alpha = 0
             
             height += detailHeight + 10
-            self.mainView.backgroundColor = KLTheme.sharedInstance.themeType == .DefaultTheme ? UIColor(white:245/255, alpha:1) : UIColor(white:38/255, alpha:1)
+            self.mainView.backgroundColor = KLTheme.sharedInstance.themeType == .defaultTheme ? UIColor(white:245/255, alpha:1) : UIColor(white:38/255, alpha:1)
         } else {
             detailLabel.alpha = 0
             detailLabel.removeFromSuperview()
             detailImage.alpha = 0
             topicImage.alpha = 1
-            self.mainView.backgroundColor = KLTheme.sharedInstance.themeType == .DefaultTheme ? UIColor(white:255/255, alpha:1) : UIColor(white:51/255, alpha:1)
+            self.mainView.backgroundColor = KLTheme.sharedInstance.themeType == .defaultTheme ? UIColor(white:255/255, alpha:1) : UIColor(white:51/255, alpha:1)
         }
         
-        mainView.frame = CGRectMake(0, 0, ScreenWidth, height)
-        line.frame = CGRectMake(0, height - 0.5, ScreenWidth, 0.5)
+        mainView.frame = CGRect(x: 0, y: 0, width: ScreenWidth, height: height)
+        line.frame = CGRect(x: 0, y: height - 0.5, width: ScreenWidth, height: 0.5)
         
-        moreIcon.frame = CGRectMake(ScreenWidth, (height - 24) / 2, 70, 24)
+        moreIcon.frame = CGRect(x: ScreenWidth, y: (height - 24) / 2, width: 70, height: 24)
     }
     
-    func setDetailViewable(showDetail : Bool) {
+    func setDetailViewable(_ showDetail : Bool) {
         detailStatus = showDetail
         if showDetail {
             mainView.addSubview(detailLabel)
             self.detailLabel.alpha = 0
-            UIView.animateWithDuration(0.3, animations: {
-                self.mainView.frame = CGRectMake(0, 0, ScreenWidth, 10 + self.titleLabel.frame.size.height + 10 + self.detailLabel.frame.size.height + 10)
-                self.line.frame = CGRectMake(0, self.mainView.frame.size.height - 0.5, ScreenWidth, 0.5)
+            UIView.animate(withDuration: 0.3, animations: {
+                self.mainView.frame = CGRect(x: 0, y: 0, width: ScreenWidth, height: 10 + self.titleLabel.frame.size.height + 10 + self.detailLabel.frame.size.height + 10)
+                self.line.frame = CGRect(x: 0, y: self.mainView.frame.size.height - 0.5, width: ScreenWidth, height: 0.5)
                 self.detailLabel.alpha = 1
                 
                 self.detailImage.alpha = 1
                 self.topicImage.alpha = 0
                 self.mainView.backgroundColor = KLTheme.sharedInstance.detailTextBackgroundColor
             }, completion:nil)
-            moreIcon.frame = CGRectMake(ScreenWidth, (self.mainView.frame.size.height - 24) / 2, 70, 24)
+            moreIcon.frame = CGRect(x: ScreenWidth, y: (self.mainView.frame.size.height - 24) / 2, width: 70, height: 24)
         } else {
-            UIView.animateWithDuration(0.3, animations: {
-                self.mainView.frame = CGRectMake(0, 0, ScreenWidth, 10 + self.titleLabel.frame.size.height + 10)
-                self.line.frame = CGRectMake(0, self.mainView.frame.size.height - 0.5, ScreenWidth, 0.5)
+            UIView.animate(withDuration: 0.3, animations: {
+                self.mainView.frame = CGRect(x: 0, y: 0, width: ScreenWidth, height: 10 + self.titleLabel.frame.size.height + 10)
+                self.line.frame = CGRect(x: 0, y: self.mainView.frame.size.height - 0.5, width: ScreenWidth, height: 0.5)
                 self.detailLabel.alpha = 0
                 
                 self.detailImage.alpha = 0
@@ -188,7 +188,7 @@ class NewsCell: UITableViewCell{
             },completion:{ (complete) in
                 self.detailLabel.removeFromSuperview()
             })
-            moreIcon.frame = CGRectMake(ScreenWidth, (self.mainView.frame.size.height - 24) / 2, 70, 24)
+            moreIcon.frame = CGRect(x: ScreenWidth, y: (self.mainView.frame.size.height - 24) / 2, width: 70, height: 24)
         }
     }
     
@@ -198,25 +198,25 @@ class NewsCell: UITableViewCell{
 }
 
 extension NewsCell{
-    class func calHeight(news: CBNews, showDetail: Bool) -> CGFloat {
+    class func calHeight(_ news: CBNews, showDetail: Bool) -> CGFloat {
         var height : CGFloat = 10.0
         
         let titleLabel : UILabel = UILabel()
-        titleLabel.font = UIFont.boldSystemFontOfSize(16)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
         titleLabel.numberOfLines = 0
-        titleLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        titleLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleLabel.text = news.title
-        let titleHeight : CGFloat = max(40, titleLabel.sizeThatFits(CGSizeMake(ScreenWidth - 35 - 40, CGFloat.max)).height)
+        let titleHeight : CGFloat = max(40, titleLabel.sizeThatFits(CGSize(width: ScreenWidth - 35 - 40, height: CGFloat.greatestFiniteMagnitude)).height)
         
         height += titleHeight + 10
         
         if showDetail{
             let detailLabel : UILabel = UILabel()
-            detailLabel.font = UIFont.systemFontOfSize(14)
+            detailLabel.font = UIFont.systemFont(ofSize: 14)
             detailLabel.numberOfLines = 0;
-            detailLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+            detailLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
             detailLabel.text = news.summary
-            let detailHeight : CGFloat = detailLabel.sizeThatFits(CGSizeMake(ScreenWidth - 30, CGFloat.max)).height
+            let detailHeight : CGFloat = detailLabel.sizeThatFits(CGSize(width: ScreenWidth - 30, height: CGFloat.greatestFiniteMagnitude)).height
             
             height += detailHeight + 10
         }
@@ -224,16 +224,16 @@ extension NewsCell{
         return max(height, 60)
     }
     
-    override func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if let panGestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer {
-            let point = panGestureRecognizer.velocityInView(self)
+            let point = panGestureRecognizer.velocity(in: self)
             if abs(point.x) > abs(point.y) {
                 return true
             } else {
                 return false
             }
         }
-        return !editing
+        return !isEditing
     }
 }
 

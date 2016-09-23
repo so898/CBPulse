@@ -15,8 +15,8 @@ private var KLThemeKey = ""
 private var KLNightMode = "CBNightMode"
 
 public enum KLThemeType{
-    case DefaultTheme
-    case DarkTheme
+    case defaultTheme
+    case darkTheme
 }
 
 class KLTheme {
@@ -25,66 +25,66 @@ class KLTheme {
     //Colors
     var titleTextColor : UIColor! {
         get {
-            return KLTheme.sharedInstance.themeType == .DefaultTheme ? UIColor.blackColor() : UIColor.whiteColor()
+            return KLTheme.sharedInstance.themeType == .defaultTheme ? UIColor.black : UIColor.white
         }
     }
     
     var detailTextColor : UIColor! {
         get {
-            return KLTheme.sharedInstance.themeType == .DefaultTheme ? UIColor(white:78/255, alpha:1) : UIColor(white:198/255, alpha:1)
+            return KLTheme.sharedInstance.themeType == .defaultTheme ? UIColor(white:78/255, alpha:1) : UIColor(white:198/255, alpha:1)
         }
     }
     
     var textBackgroundColor : UIColor! {
         get {
-            return KLTheme.sharedInstance.themeType == .DefaultTheme ? UIColor(white:255/255, alpha:1) : UIColor(white:51/255, alpha:1)
+            return KLTheme.sharedInstance.themeType == .defaultTheme ? UIColor(white:255/255, alpha:1) : UIColor(white:51/255, alpha:1)
         }
     }
     
     var detailTextBackgroundColor : UIColor! {
         get {
-            return KLTheme.sharedInstance.themeType == .DefaultTheme ? UIColor(white:245/255, alpha:1) : UIColor(white:38/255, alpha:1)
+            return KLTheme.sharedInstance.themeType == .defaultTheme ? UIColor(white:245/255, alpha:1) : UIColor(white:38/255, alpha:1)
         }
     }
     
     var cellBackgroundColor : UIColor! {
         get {
-            return KLTheme.sharedInstance.themeType == .DefaultTheme ? UIColor(white: 230/255, alpha: 1) : UIColor(white: 26/255, alpha: 1)
+            return KLTheme.sharedInstance.themeType == .defaultTheme ? UIColor(white: 230/255, alpha: 1) : UIColor(white: 26/255, alpha: 1)
         }
     }
     
     var lineColor : UIColor! {
         get {
-            return KLTheme.sharedInstance.themeType == .DefaultTheme ? UIColor(white: 204/255, alpha: 1) : UIColor(white: 78/255, alpha: 1)
+            return KLTheme.sharedInstance.themeType == .defaultTheme ? UIColor(white: 204/255, alpha: 1) : UIColor(white: 78/255, alpha: 1)
         }
     }
     
     var tableBackgroundColor : UIColor! {
         get {
-            return KLTheme.sharedInstance.themeType == .DefaultTheme ? UIColor(white: 245/255, alpha: 1) : UIColor(white: 77/255, alpha: 1)
+            return KLTheme.sharedInstance.themeType == .defaultTheme ? UIColor(white: 245/255, alpha: 1) : UIColor(white: 77/255, alpha: 1)
         }
     }
     
     static let sharedInstance = KLTheme()//Singleton
     
     init(){
-        if NSUserDefaults.standardUserDefaults().boolForKey(KLNightMode){
-            themeType = .DarkTheme
+        if UserDefaults.standard.bool(forKey: KLNightMode){
+            themeType = .darkTheme
         } else {
-            themeType = .DefaultTheme
+            themeType = .defaultTheme
         }
         
     }
     
     func changeType(){
-        if .DefaultTheme == self.themeType {
-            self.themeType = .DarkTheme
-            NSUserDefaults.standardUserDefaults().setBool(true, forKey: KLNightMode)
-        } else if .DarkTheme == self.themeType {
-            self.themeType = .DefaultTheme
-            NSUserDefaults.standardUserDefaults().setBool(false, forKey: KLNightMode)
+        if .defaultTheme == self.themeType {
+            self.themeType = .darkTheme
+            UserDefaults.standard.set(true, forKey: KLNightMode)
+        } else if .darkTheme == self.themeType {
+            self.themeType = .defaultTheme
+            UserDefaults.standard.set(false, forKey: KLNightMode)
         }
-        NSNotificationCenter.defaultCenter().postNotificationName(KLThemeUpdateNotification, object: nil)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: KLThemeUpdateNotification), object: nil)
     }
 }
 
@@ -100,8 +100,8 @@ class KLTheme {
 //}
 
 extension UIScrollView{
-    public override func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if 2 == gestureRecognizer.numberOfTouches() && !gestureRecognizer.isKindOfClass(UISwipeGestureRecognizer){
+    open override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if 2 == gestureRecognizer.numberOfTouches && !gestureRecognizer.isKind(of: UISwipeGestureRecognizer.self){
             return false
         }
         return true
@@ -132,8 +132,8 @@ extension UIViewController{
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(changeSystemColor(_:)))
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(changeSystemColor(_:)))        
         
-        swipeUp.direction = UISwipeGestureRecognizerDirection.Up
-        swipeDown.direction = UISwipeGestureRecognizerDirection.Down
+        swipeUp.direction = UISwipeGestureRecognizerDirection.up
+        swipeDown.direction = UISwipeGestureRecognizerDirection.down
         
         swipeUp.numberOfTouchesRequired = 2
         swipeDown.numberOfTouchesRequired = 2
@@ -142,59 +142,59 @@ extension UIViewController{
         view.addGestureRecognizer(swipeDown)
     }
     
-    @objc func changeSystemColor(gesture : UISwipeGestureRecognizer) {
+    @objc func changeSystemColor(_ gesture : UISwipeGestureRecognizer) {
         let coverView : UIView = UIView()
         let tmpCover : UIImageView = UIImageView()
         var cover : UIImage
         
-        if nil != self.view.window && self.isViewLoaded() {
-            coverView.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight)
+        if nil != self.view.window && self.isViewLoaded {
+            coverView.frame = CGRect(x: 0, y: 0, width: ScreenWidth, height: ScreenHeight)
             coverView.clipsToBounds = true
             self.view.window?.addSubview(coverView)
             
             cover = Utils.imageWithView(self.view.window!)
-            tmpCover.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight)
+            tmpCover.frame = CGRect(x: 0, y: 0, width: ScreenWidth, height: ScreenHeight)
             tmpCover.image = cover
             coverView.addSubview(tmpCover)
         }
         
-        if KLTheme.sharedInstance.themeType == .DefaultTheme && gesture.direction == UISwipeGestureRecognizerDirection.Down{
+        if KLTheme.sharedInstance.themeType == .defaultTheme && gesture.direction == UISwipeGestureRecognizerDirection.down{
             KLTheme.sharedInstance.changeType()
-        } else if KLTheme.sharedInstance.themeType == .DarkTheme && gesture.direction == .Up{
+        } else if KLTheme.sharedInstance.themeType == .darkTheme && gesture.direction == .up{
             KLTheme.sharedInstance.changeType()
         }
         
-        if nil != self.view.window && self.isViewLoaded() {
-            UIView.animateWithDuration(0.15, animations: {
-                if KLThemeType.DarkTheme == KLTheme.sharedInstance.themeType {
-                    coverView.frame = CGRectMake(0, ScreenHeight, ScreenWidth, ScreenHeight)
-                    tmpCover.frame = CGRectMake(0, -ScreenHeight, ScreenWidth, ScreenHeight)
+        if nil != self.view.window && self.isViewLoaded {
+            UIView.animate(withDuration: 0.15, animations: {
+                if KLThemeType.darkTheme == KLTheme.sharedInstance.themeType {
+                    coverView.frame = CGRect(x: 0, y: ScreenHeight, width: ScreenWidth, height: ScreenHeight)
+                    tmpCover.frame = CGRect(x: 0, y: -ScreenHeight, width: ScreenWidth, height: ScreenHeight)
                 } else {
-                    coverView.frame = CGRectMake(0, -ScreenHeight, ScreenWidth, ScreenHeight)
-                    tmpCover.frame = CGRectMake(0, ScreenHeight, ScreenWidth, ScreenHeight)
+                    coverView.frame = CGRect(x: 0, y: -ScreenHeight, width: ScreenWidth, height: ScreenHeight)
+                    tmpCover.frame = CGRect(x: 0, y: ScreenHeight, width: ScreenWidth, height: ScreenHeight)
                 }
-            }) { (complete) in
+            }, completion: { (complete) in
                 coverView.removeFromSuperview()
-            }
+            }) 
         }
     }
     
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
 }
 
 extension UINavigationController{
     override func addNotification() {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: KLThemeUpdateNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(updateThemeForKL), name: KLThemeUpdateNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: KLThemeUpdateNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateThemeForKL), name: NSNotification.Name(rawValue: KLThemeUpdateNotification), object: nil)
     }
     
     @objc override func updateThemeForKL() {
-        if KLThemeType.DefaultTheme == KLTheme.sharedInstance.themeType {
-            navigationBar.barStyle = UIBarStyle.Default
-        } else if KLThemeType.DarkTheme == KLTheme.sharedInstance.themeType {
-            navigationBar.barStyle = UIBarStyle.Black
+        if KLThemeType.defaultTheme == KLTheme.sharedInstance.themeType {
+            navigationBar.barStyle = UIBarStyle.default
+        } else if KLThemeType.darkTheme == KLTheme.sharedInstance.themeType {
+            navigationBar.barStyle = UIBarStyle.black
         }
     }
 }
@@ -202,12 +202,12 @@ extension UINavigationController{
 extension NSObject{
     
     func addNotification (){
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(updateThemeForKL), name: KLThemeUpdateNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateThemeForKL), name: NSNotification.Name(rawValue: KLThemeUpdateNotification), object: nil)
     }
     
     var theme : String {
         get {
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(updateThemeForKL), name: KLThemeUpdateNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(updateThemeForKL), name: NSNotification.Name(rawValue: KLThemeUpdateNotification), object: nil)
             return "ABC"
         }
     }
@@ -217,9 +217,9 @@ extension NSObject{
         }
         set {
             objc_setAssociatedObject(self, &KLThemeKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            NSNotificationCenter.defaultCenter().removeObserver(self, name: KLThemeUpdateNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: KLThemeUpdateNotification), object: nil)
             if false == newValue.isEmpty {
-                NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(updateThemeForKL), name: KLThemeUpdateNotification, object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(updateThemeForKL), name: NSNotification.Name(rawValue: KLThemeUpdateNotification), object: nil)
             }
         }
     }

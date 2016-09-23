@@ -10,28 +10,28 @@ import Foundation
 import UIKit
 import Security
 
-var ScreenWidth : CGFloat = UIScreen.mainScreen().bounds.size.width
-var ScreenHeight : CGFloat = UIScreen.mainScreen().bounds.size.height
+var ScreenWidth : CGFloat = UIScreen.main.bounds.size.width
+var ScreenHeight : CGFloat = UIScreen.main.bounds.size.height
 
 class Utils {
     
-    static let timeStamp : String = String.init(NSString.init(format: "%.0f", (NSDate().timeIntervalSince1970*1000)))
+    static let timeStamp : String = String.init(NSString.init(format: "%.0f", (Date().timeIntervalSince1970*1000)))
     
-    class func decodeJSONToData(data: NSData) -> AnyObject {
+    class func decodeJSONToData(_ data: Data) -> AnyObject {
         var result : AnyObject
         do {
-            result = try NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.MutableLeaves) as! NSMutableDictionary
+            result = try JSONSerialization.jsonObject(with: data, options:JSONSerialization.ReadingOptions.mutableLeaves) as! NSDictionary
         } catch _ {
-            result = NSMutableDictionary()
+            result = NSDictionary()
         }
         
         return result
     }
     
-    class func MD5(string: String) -> String {
-        var digest = [UInt8](count: Int(CC_MD5_DIGEST_LENGTH), repeatedValue: 0)
-        if let data = string.dataUsingEncoding(NSUTF8StringEncoding) {
-            CC_MD5(data.bytes, CC_LONG(data.length), &digest)
+    class func MD5(_ string: String) -> String {
+        var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
+        if let data = string.data(using: String.Encoding.utf8) {
+            CC_MD5((data as NSData).bytes, CC_LONG(data.count), &digest)
         }
         
         var digestHex = ""
@@ -42,11 +42,11 @@ class Utils {
         return digestHex
     }
     
-    class func imageWithView(view : UIView) -> UIImage{
-        UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0.0);
-        view.layer.renderInContext(UIGraphicsGetCurrentContext()!);
+    class func imageWithView(_ view : UIView) -> UIImage{
+        UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.isOpaque, 0.0);
+        view.layer.render(in: UIGraphicsGetCurrentContext()!);
         
-        let img : UIImage = UIGraphicsGetImageFromCurrentImageContext();
+        let img : UIImage = UIGraphicsGetImageFromCurrentImageContext()!;
         
         UIGraphicsEndImageContext();
         
@@ -54,6 +54,6 @@ class Utils {
     }
     
     func Width() -> CGFloat {
-        return UIScreen.mainScreen().bounds.size.width
+        return UIScreen.main.bounds.size.width
     }
 }

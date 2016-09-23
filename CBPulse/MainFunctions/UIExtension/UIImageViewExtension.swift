@@ -8,24 +8,24 @@
 
 import UIKit
 
-class ImageCache : NSCache{
+class ImageCache : NSCache<AnyObject, AnyObject>{
     static let sharedInstance = ImageCache()//Singleton
 }
 
 extension UIImageView{
-    func setNetImage(url : NSURL){
-        let session = NSURLSession.sharedSession();
+    func setNetImage(_ url : URL){
+        let session = URLSession.shared;
         //make request
-        let request : NSMutableURLRequest = NSMutableURLRequest.init(URL: url, cachePolicy: NSURLRequestCachePolicy.ReturnCacheDataElseLoad, timeoutInterval: 10)
-        request.HTTPMethod = "GET"
+        let request : NSMutableURLRequest = NSMutableURLRequest.init(url: url, cachePolicy: NSURLRequest.CachePolicy.returnCacheDataElseLoad, timeoutInterval: 10)
+        request.httpMethod = "GET"
         
         let cache : ImageCache = ImageCache.sharedInstance
-        let cacheData = cache.objectForKey(url)
+        let cacheData = cache.object(forKey: url as AnyObject)
         if nil != cacheData{
-            dispatch_async(dispatch_queue_create("My Queue", nil), {
-                let image = UIImage(data: cacheData as! NSData)
+            DispatchQueue(label: "My Queue", attributes: []).async(execute: {
+                let image = UIImage(data: cacheData as! Data)
                 
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     // Update the UI
                         self.image = image
                     })
@@ -35,18 +35,18 @@ extension UIImageView{
         }
         
         //fire session
-        session.dataTaskWithRequest(request as NSURLRequest) { (data, response, error) in
-            if response is NSHTTPURLResponse{
-                let statusCode : NSInteger = (response as! NSHTTPURLResponse).statusCode
+        session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) in
+            if response is HTTPURLResponse{
+                let statusCode : NSInteger = (response as! HTTPURLResponse).statusCode
                 if 200 == statusCode{
-                    ImageCache.sharedInstance.setObject(data!, forKey: url)
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    ImageCache.sharedInstance.setObject(data! as AnyObject, forKey: url as AnyObject)
+                    DispatchQueue.main.async(execute: { () -> Void in
                         self.image = UIImage(data: data!)
                     })
                 } else {
                     
                 }
             }
-            }.resume()
+            }) .resume()
     }
 }
